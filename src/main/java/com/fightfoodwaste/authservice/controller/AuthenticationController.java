@@ -24,6 +24,8 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationService service;
 
+    
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
