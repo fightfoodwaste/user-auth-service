@@ -97,7 +97,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.1.0</version>
-                <configuration>
+                <!--configuration>
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
@@ -105,7 +105,7 @@
                             <mainclass>com.fightfoodwaste.authservice.AuthServiceApplication.class</mainclass>
                         </manifest>
                     </archive>
-                </configuration>
+                </configuration-->
             </plugin>
         </plugins>
     </build>
