@@ -4,6 +4,8 @@ import com.fightfoodwaste.authservice.DTO.AuthResponse;
 import com.fightfoodwaste.authservice.DTO.RegisteredResponse;
 import com.fightfoodwaste.authservice.DTO.ValidateRequest;
 import com.fightfoodwaste.authservice.service.AuthenticationService;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,18 +19,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/auth")
-public class AuthenticationController {
+@AllArgsConstructor
+public class AuthenticationController{
 
-    @Autowired
-    private AuthenticationService service;
-
-    
-
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
+    private final AuthenticationService service;
+    private final AuthenticationManager authenticationManager;
     @PostMapping("/register")
     public ResponseEntity<RegisteredResponse> addNewUser(@RequestBody UserCredential user) {
         try{
@@ -44,9 +42,9 @@ public class AuthenticationController {
 
     @PostMapping("/token")
     public ResponseEntity<AuthResponse> getToken(@RequestBody AuthRequest authRequest) {
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.username(), authRequest.password()));
         if (authenticate.isAuthenticated()) {
-            AuthResponse response = service.generateToken(authRequest.getUsername());
+            AuthResponse response = service.generateToken(authRequest);
             return ResponseEntity.ok().body(response);
         } else {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
