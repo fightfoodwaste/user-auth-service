@@ -56,7 +56,7 @@ public class AuthenticationServiceTest {
         UserCredential userCredential = null;
         RegisteredResponse response = authenticationService.saveUser(userCredential);
 
-        assertEquals(HttpStatus.OK, response.getStatus());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
         assertEquals("Invalid request", response.getMessage());
     }
 
