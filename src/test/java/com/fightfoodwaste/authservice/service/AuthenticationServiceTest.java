@@ -42,7 +42,6 @@ public class AuthenticationServiceTest {
         // Mocking
         UserCredential credential = new UserCredential(); // Assuming a constructor or setters
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
-        doNothing().when(repository).save(any(UserCredential.class));
 
         // Execution
         RegisteredResponse response = authenticationService.saveUser(credential);
