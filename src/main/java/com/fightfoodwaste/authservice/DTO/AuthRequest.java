@@ -1,7 +1,16 @@
 package com.fightfoodwaste.authservice.DTO;
 
 
-public record AuthRequest(
-        String username,
-        String password){
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class AuthRequest{
+
+        private String username;
+        private String password;
+
 }

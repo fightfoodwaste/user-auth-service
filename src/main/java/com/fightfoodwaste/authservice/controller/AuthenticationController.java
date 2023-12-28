@@ -1,19 +1,16 @@
 package com.fightfoodwaste.authservice.controller;
 
+import com.fightfoodwaste.authservice.DTO.AuthRequest;
 import com.fightfoodwaste.authservice.DTO.AuthResponse;
 import com.fightfoodwaste.authservice.DTO.RegisteredResponse;
 import com.fightfoodwaste.authservice.DTO.ValidateRequest;
+import com.fightfoodwaste.authservice.entity.UserCredential;
 import com.fightfoodwaste.authservice.service.AuthenticationService;
+import com.fightfoodwaste.authservice.service.MessagingService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.fightfoodwaste.authservice.DTO.AuthRequest;
-import com.fightfoodwaste.authservice.entity.UserCredential;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,7 +39,7 @@ public class AuthenticationController{
 
     @PostMapping("/token")
     public ResponseEntity<AuthResponse> getToken(@RequestBody AuthRequest authRequest) {
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.username(), authRequest.password()));
+        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         if (authenticate.isAuthenticated()) {
             AuthResponse response = service.generateToken(authRequest);
             return ResponseEntity.ok().body(response);
@@ -61,4 +58,5 @@ public class AuthenticationController{
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
         }
     }
+
 }

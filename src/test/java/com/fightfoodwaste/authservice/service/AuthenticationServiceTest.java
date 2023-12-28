@@ -1,12 +1,11 @@
 package com.fightfoodwaste.authservice.service;
+
 import com.fightfoodwaste.authservice.DTO.AuthRequest;
 import com.fightfoodwaste.authservice.DTO.AuthResponse;
-import com.fightfoodwaste.authservice.DTO.ValidateRequest;
 import com.fightfoodwaste.authservice.DTO.RegisteredResponse;
+import com.fightfoodwaste.authservice.DTO.ValidateRequest;
 import com.fightfoodwaste.authservice.entity.UserCredential;
 import com.fightfoodwaste.authservice.repository.UserCredentialRepository;
-import com.fightfoodwaste.authservice.service.AuthenticationService;
-import com.fightfoodwaste.authservice.service.JwtService;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -15,8 +14,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
 
 public class AuthenticationServiceTest {
 

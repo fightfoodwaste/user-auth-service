@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-public record ValidateRequest(String auth_token) {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class ValidateRequest  {
+    private String auth_token;
 }
