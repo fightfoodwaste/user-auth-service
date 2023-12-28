@@ -1,9 +1,8 @@
 package com.fightfoodwaste.authservice.controller;
 
 import com.fightfoodwaste.authservice.DTO.*;
-import com.fightfoodwaste.authservice.entity.UserCredential;
 import com.fightfoodwaste.authservice.service.AuthenticationService;
-import com.fightfoodwaste.authservice.service.MessagingService;
+import com.fightfoodwaste.authservice.service.AuthenticationServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

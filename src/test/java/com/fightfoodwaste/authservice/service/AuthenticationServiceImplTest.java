@@ -1,10 +1,6 @@
 package com.fightfoodwaste.authservice.service;
 
-import com.fightfoodwaste.authservice.DTO.AuthRequest;
-import com.fightfoodwaste.authservice.DTO.AuthResponse;
-import com.fightfoodwaste.authservice.DTO.RegisteredResponse;
-import com.fightfoodwaste.authservice.DTO.ValidateRequest;
-import com.fightfoodwaste.authservice.entity.UserCredential;
+import com.fightfoodwaste.authservice.DTO.*;
 import com.fightfoodwaste.authservice.repository.UserCredentialRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class AuthenticationServiceTest {
+public class AuthenticationServiceImplTest {
 
     @Mock
     private UserCredentialRepository repository;
@@ -26,10 +22,10 @@ public class AuthenticationServiceTest {
     private PasswordEncoder passwordEncoder;
 
     @Mock
-    private JwtService jwtService;
+    private JwtServiceImpl jwtServiceImpl;
 
     @InjectMocks
-    private AuthenticationService authenticationService;
+    private AuthenticationServiceImpl authenticationService;
 
     @Before
     public void setUp() {
@@ -39,7 +35,7 @@ public class AuthenticationServiceTest {
     @Test
     public void testSaveUser_Success() {
         // Mocking
-        UserCredential credential = new UserCredential(); // Assuming a constructor or setters
+        RegisterRequest credential = new RegisterRequest(); // Assuming a constructor or setters
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
         // Execution
@@ -52,7 +48,7 @@ public class AuthenticationServiceTest {
 
     @Test
     public void testSaveUser_NullCredential() {
-        UserCredential userCredential = null;
+        RegisterRequest userCredential = null;
         RegisteredResponse response = authenticationService.saveUser(userCredential);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
@@ -63,7 +59,7 @@ public class AuthenticationServiceTest {
     public void testGenerateToken() {
         // Mocking
         String expectedToken = "token";
-        when(jwtService.generateToken(anyString())).thenReturn(expectedToken);
+        when(jwtServiceImpl.generateToken(anyString())).thenReturn(expectedToken);
 
         // Execution
         AuthResponse response = authenticationService.generateToken(new AuthRequest("username", "password"));
@@ -75,13 +71,13 @@ public class AuthenticationServiceTest {
     @Test
     public void testValidateToken() {
         // Mocking
-        doNothing().when(jwtService).validateToken(anyString());
+        doNothing().when(jwtServiceImpl).validateToken(anyString());
 
         // Execution
         authenticationService.validateToken(new ValidateRequest("validToken"));
 
         // Verification
-        verify(jwtService).validateToken("validToken");
+        verify(jwtServiceImpl).validateToken("validToken");
     }
 
     // Additional tests to handle exceptions and other edge cases
