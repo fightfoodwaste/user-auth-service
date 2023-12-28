@@ -1,9 +1,6 @@
 package com.fightfoodwaste.authservice.controller;
 
-import com.fightfoodwaste.authservice.DTO.AuthRequest;
-import com.fightfoodwaste.authservice.DTO.AuthResponse;
-import com.fightfoodwaste.authservice.DTO.RegisteredResponse;
-import com.fightfoodwaste.authservice.DTO.ValidateRequest;
+import com.fightfoodwaste.authservice.DTO.*;
 import com.fightfoodwaste.authservice.entity.UserCredential;
 import com.fightfoodwaste.authservice.service.AuthenticationService;
 import com.fightfoodwaste.authservice.service.MessagingService;
@@ -25,14 +22,14 @@ public class AuthenticationController{
     private final AuthenticationService service;
     private final AuthenticationManager authenticationManager;
     @PostMapping("/register")
-    public ResponseEntity<RegisteredResponse> addNewUser(@RequestBody UserCredential user) {
+    public ResponseEntity<RegisteredResponse> addNewUser(@RequestBody RegisterRequest request) {
         try{
-            RegisteredResponse response= service.saveUser(user);
+            RegisteredResponse response= service.saveUser(request);
             return ResponseEntity.status(response.getStatus()).body(response);
         }
         catch(RuntimeException e){
             System.out.println(e.getMessage());
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.internalServerError().build();
         }
 
     }

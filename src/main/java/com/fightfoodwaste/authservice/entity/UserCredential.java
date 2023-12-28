@@ -20,4 +20,9 @@ public class UserCredential {
     private String username;
     @Column(name = "password")
     private String password;
+
+    public UserCredential(String username, String password){
+        this.username = username;
+        this.password = password;
+    }
 }
