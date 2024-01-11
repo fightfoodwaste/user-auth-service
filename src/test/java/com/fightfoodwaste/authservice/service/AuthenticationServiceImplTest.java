@@ -33,8 +33,7 @@ public class AuthenticationServiceImplTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    @Test
-    @Disabled
+    /*@Test
     public void testSaveUser_Success() {
         // Mocking
         RegisterRequest credential = new RegisterRequest(); // Assuming a constructor or setters
@@ -46,7 +45,7 @@ public class AuthenticationServiceImplTest {
         // Assertions
         assertEquals(HttpStatus.OK, response.getStatus());
         assertEquals("Successful registration", response.getMessage());
-    }
+    }*/
 
     @Test
     public void testSaveUser_NullCredential() {
