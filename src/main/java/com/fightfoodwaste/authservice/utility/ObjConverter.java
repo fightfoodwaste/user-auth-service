@@ -5,12 +5,12 @@ import com.fightfoodwaste.authservice.message.UserRegisteredPayload;
 
 public class ObjConverter {
 
-    public UserRegisteredPayload toUserRegistrationPayload(int id, RegisterRequest request){
+    public UserRegisteredPayload toUserRegistrationPayload(Long id, RegisterRequest request){
         return new UserRegisteredPayload(
                 id,
                 request.getFirst_name(),
                 request.getLast_name(),
-                request.getDate_of_birth()
+                request.getDate_of_birth().getTime()
         );
     }
 }

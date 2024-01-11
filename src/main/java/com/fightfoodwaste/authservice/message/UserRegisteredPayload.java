@@ -10,8 +10,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class UserRegisteredPayload {
 
-    private int auth_id;
+    private Long auth_id;
     private String first_name;
     private String last_name;
-    private Date date_of_birth;
+    private Long date_of_birth;
 }

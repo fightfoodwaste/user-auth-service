@@ -1,30 +1,23 @@
 package com.fightfoodwaste.authservice.config;
 
 import com.rabbitmq.client.ConnectionFactory;
-import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MessagingConfig {
-
     @Bean
-    public MessageConverter jsonMessageConverter(){
-        return new Jackson2JsonMessageConverter();
-    }
-
-    @Bean
-    public org.springframework.amqp.rabbit.connection.ConnectionFactory getConnectionFactory(){
-        return new CachingConnectionFactory();
-    }
-
-    @Bean
-    public RabbitTemplate rabbitTemplate(){
-        RabbitTemplate template = new RabbitTemplate(getConnectionFactory());
-        template.setMessageConverter(jsonMessageConverter());
-        return template;
+    public ConnectionFactory getConnectionFactory(){
+        /*ConnectionFactory connectionFactory = new ConnectionFactory();
+        connectionFactory.setHost(System.getenv("RABBITMQ_HOST"));
+        connectionFactory.setPort(Integer.parseInt(System.getenv("RABBITMQ_PORT")));
+        connectionFactory.setUsername(System.getenv("RABBITMQ_USERNAME"));
+        connectionFactory.setPassword(System.getenv("RABBITMQ_PASSWORD"));*/
+        ConnectionFactory connectionFactory = new ConnectionFactory();
+        connectionFactory.setHost("localhost");
+        connectionFactory.setPort(Integer.parseInt("5672"));
+        connectionFactory.setUsername("guest");
+        connectionFactory.setPassword("guest");
+        return connectionFactory;
     }
 }
