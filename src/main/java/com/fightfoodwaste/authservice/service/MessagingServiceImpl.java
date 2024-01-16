@@ -1,5 +1,6 @@
 package com.fightfoodwaste.authservice.service;
 
+import com.fightfoodwaste.authservice.config.MessagingConfig;
 import com.fightfoodwaste.authservice.message.UserRegisteredPayload;
 import com.fightfoodwaste.authservice.utility.JsonExtract;
 import com.fightfoodwaste.authservice.utility.JsonExtractImpl;
@@ -7,6 +8,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -17,12 +19,17 @@ import java.util.concurrent.TimeoutException;
 @RequiredArgsConstructor
 public class MessagingServiceImpl implements MessagingService{
 
-    private final ConnectionFactory connectionFactory;
 
-    private final JsonExtract jsonExtract;
+    //private final JsonExtract jsonExtract;
 
+    private final AmqpTemplate rabbitTemplate;
 
-    public void publishUserRegistration(UserRegisteredPayload payload){
+    public void publishUserRegistration(UserRegisteredPayload message) {
+        rabbitTemplate.convertAndSend(MessagingConfig.EXCHANGE_NAME, MessagingConfig.ROUTING_KEY, message);
+        System.out.println("Message Published!");
+    }
+
+    /*public void publishUserRegistration(UserRegisteredPayload payload){
         //String routing_key = "user-registration";
         try(Connection connection = connectionFactory.newConnection()){
             Channel channel = connection.createChannel();
@@ -45,5 +52,5 @@ public class MessagingServiceImpl implements MessagingService{
             e.printStackTrace();
             System.out.println("Timeout");
         }
-    }
+    }*/
 }

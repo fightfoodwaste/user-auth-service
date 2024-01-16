@@ -1,9 +1,11 @@
 package com.fightfoodwaste.authservice.service;
 
+import com.fightfoodwaste.authservice.env.EnvVariables;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -12,9 +14,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
+@RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService{
-    public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
 
+    private final EnvVariables envVariables;
 
     public void validateToken(final String token) {
         Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token);
@@ -36,7 +39,7 @@ public class JwtServiceImpl implements JwtService{
     }
 
     public Key getSignKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET);
+        byte[] keyBytes = Decoders.BASE64.decode(envVariables.getKey());
         return Keys.hmacShaKeyFor(keyBytes);
     }
 }
