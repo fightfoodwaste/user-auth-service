@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController{
 
     private final AuthenticationService service;
-    private final AuthenticationManager authenticationManager;
+
     @PostMapping("/register")
     public ResponseEntity<RegisteredResponse> addNewUser(@RequestBody RegisterRequest request) {
         try{
@@ -27,7 +27,6 @@ public class AuthenticationController{
             return ResponseEntity.status(response.getStatus()).body(response);
         }
         catch(RuntimeException e){
-            System.out.println(e.getMessage());
             return ResponseEntity.internalServerError().build();
         }
 
@@ -35,12 +34,15 @@ public class AuthenticationController{
 
     @PostMapping("/token")
     public ResponseEntity<AuthResponse> getToken(@RequestBody AuthRequest authRequest) {
-        Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-        if (authenticate.isAuthenticated()) {
-            AuthResponse response = service.generateToken(authRequest);
-            return ResponseEntity.ok().body(response);
-        } else {
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
+        try{
+            AuthResponse response = service.authenticate(authRequest);
+            HttpStatus status = response.getStatus();
+            if(status == HttpStatus.EXPECTATION_FAILED){
+                return ResponseEntity.status(status).build();
+            }
+            return ResponseEntity.status(status).body(response);
+        }catch(Exception e){
+            return ResponseEntity.internalServerError().build();
         }
     }
 

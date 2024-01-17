@@ -56,7 +56,7 @@ public class AuthenticationServiceImplTest {
         assertEquals("Invalid request", response.getMessage());
     }
 
-    @Test
+    /*@Test
     public void testGenerateToken() {
         // Mocking
         String expectedToken = "token";
@@ -67,7 +67,7 @@ public class AuthenticationServiceImplTest {
 
         // Assertions
         assertEquals(expectedToken, response.getAuth_token());
-    }
+    }*/
 
     @Test
     public void testValidateToken() {

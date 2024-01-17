@@ -6,7 +6,7 @@ public interface AuthenticationService {
 
     RegisteredResponse saveUser(RegisterRequest request);
 
-    AuthResponse generateToken(AuthRequest request);
+    AuthResponse authenticate(AuthRequest request);
 
     void validateToken(ValidateRequest request);
 }

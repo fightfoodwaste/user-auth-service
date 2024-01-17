@@ -2,22 +2,22 @@ spring:
   application:
     name: user-auth
   datasource:
-    url: jdbc:postgresql://localhost:5433/auth
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
     show-sql: true
   rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
 
 
 
@@ -25,9 +25,12 @@ server:
   port: 8082
 
 eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: eureka-server
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://${EUREKA_INSTANCE_HOSTNAME}:${EUREKA_SERVER_PORT}/eureka
     register-with-eureka: true
     fetch-registry: true
 

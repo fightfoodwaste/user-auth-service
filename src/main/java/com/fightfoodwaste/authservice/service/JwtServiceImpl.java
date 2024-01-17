@@ -24,15 +24,15 @@ public class JwtServiceImpl implements JwtService{
     }
 
 
-    public String generateToken(String username) {
+    public String generateToken(Long id) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, username);
+        return createToken(claims, id);
     }
 
-    public String createToken(Map<String, Object> claims, String username) {
+    public String createToken(Map<String, Object> claims, Long id) {
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(username)
+                .setSubject(id.toString())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256).compact();

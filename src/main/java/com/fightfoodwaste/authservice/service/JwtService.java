@@ -7,9 +7,9 @@ public interface JwtService {
 
     void validateToken(final String token);
 
-    String generateToken(String username);
+    String generateToken(Long id);
 
-    String createToken(Map<String, Object> claims, String username);
+    String createToken(Map<String, Object> claims, Long id);
 
     Key getSignKey();
 }
