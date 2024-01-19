@@ -35,7 +35,7 @@ public class AuthConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**")
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**", "/actuator/**", "/actuator/prometheus")
                         .permitAll()
                         .anyRequest()
                         .authenticated());
