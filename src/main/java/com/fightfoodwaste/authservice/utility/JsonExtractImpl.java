@@ -1,6 +1,7 @@
 package com.fightfoodwaste.authservice.utility;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fightfoodwaste.authservice.DTO.SafeDeletionPayload;
 import com.fightfoodwaste.authservice.message.UserRegisteredPayload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,15 @@ public class JsonExtractImpl implements JsonExtract{
             return jsonString;
         }
         catch(Exception e) {
-            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public String convertSafeDeletionPayloadToJson(SafeDeletionPayload payload){
+        try{
+            String jsonString = mapper.writeValueAsString(payload);
+            return jsonString;
+        }catch (Exception e){
             return "";
         }
     }

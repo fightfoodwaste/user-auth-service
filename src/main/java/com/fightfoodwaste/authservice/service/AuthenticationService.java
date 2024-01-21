@@ -1,6 +1,7 @@
 package com.fightfoodwaste.authservice.service;
 
 import com.fightfoodwaste.authservice.DTO.*;
+import org.springframework.http.HttpStatus;
 
 public interface AuthenticationService {
 
@@ -9,4 +10,6 @@ public interface AuthenticationService {
     AuthResponse authenticate(AuthRequest request);
 
     void validateToken(ValidateRequest request);
+
+    HttpStatus deleteAccount(long id, String header);
 }

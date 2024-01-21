@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface UserCredentialRepository  extends JpaRepository<UserCredential,Integer> {
+public interface UserCredentialRepository  extends JpaRepository<UserCredential, Long> {
     Optional<UserCredential> findByUsername(String username);
 
     @Query("SELECT u.id FROM UserCredential u WHERE u.username = :username")

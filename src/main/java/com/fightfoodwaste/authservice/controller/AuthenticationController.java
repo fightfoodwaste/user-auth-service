@@ -5,12 +5,16 @@ import com.fightfoodwaste.authservice.service.AuthenticationService;
 import com.fightfoodwaste.authservice.service.AuthenticationServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+import java.util.Random;
 
 @Slf4j
 @RestController
@@ -22,11 +26,13 @@ public class AuthenticationController{
 
     @PostMapping("/register")
     public ResponseEntity<RegisteredResponse> addNewUser(@RequestBody RegisterRequest request) {
+        Random random = new Random();
         try{
-            RegisteredResponse response= service.saveUser(request);
-            return ResponseEntity.status(response.getStatus()).body(response);
+            //RegisteredResponse response= service.saveUser(request);
+            Thread.sleep(random.nextLong(500, 1500));
+            return ResponseEntity.ok().build();
         }
-        catch(RuntimeException e){
+        catch(Exception e){
             return ResponseEntity.internalServerError().build();
         }
 
@@ -54,6 +60,19 @@ public class AuthenticationController{
         }
         catch(Exception e){
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteAccount(@PathVariable("id") long id, @RequestHeader("Authorization") Optional<String> header){
+        try {
+            if(header.isEmpty()){
+                return ResponseEntity.status(403).build();
+            }
+            HttpStatus status = service.deleteAccount(id, header.get());
+            return ResponseEntity.status(status).build();
+        }catch (Exception e){
+            return ResponseEntity.internalServerError().build();
         }
     }
 

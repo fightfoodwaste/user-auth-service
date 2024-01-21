@@ -1,5 +1,6 @@
 package com.fightfoodwaste.authservice.service;
 
+import com.fightfoodwaste.authservice.DTO.SafeDeletionPayload;
 import com.fightfoodwaste.authservice.config.MessagingConfig;
 import com.fightfoodwaste.authservice.message.UserRegisteredPayload;
 import com.fightfoodwaste.authservice.utility.JsonExtract;
@@ -20,13 +21,38 @@ import java.util.concurrent.TimeoutException;
 public class MessagingServiceImpl implements MessagingService{
 
 
-    //private final JsonExtract jsonExtract;
+    private final JsonExtract jsonExtract;
 
     private final AmqpTemplate rabbitTemplate;
 
-    public void publishUserRegistration(UserRegisteredPayload message) {
-        rabbitTemplate.convertAndSend(MessagingConfig.EXCHANGE_NAME, MessagingConfig.ROUTING_KEY, message);
-        System.out.println("Message Published!");
+    private final EncryptionService encryptionService;
+
+    public void publishUserRegistration(UserRegisteredPayload payload) {
+        String message = jsonExtract.convertUserRegistrationPaylodToJson(payload);
+        try{
+            String encryptedMessage = encryptionService.encrypt(message);
+            rabbitTemplate.convertAndSend(MessagingConfig.USER_REGISTRATION_EXCHANGE_NAME, MessagingConfig.USER_REGISTRATION_ROUTING_KEY, encryptedMessage);
+
+            System.out.println("Message Published!");
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Error publishing message");
+        }
+
+    }
+
+    @Override
+    public void publishSafeDeletion(SafeDeletionPayload payload) {
+        String message = jsonExtract.convertSafeDeletionPayloadToJson(payload);
+        try{
+            String encryptedMessage = encryptionService.encrypt(message);
+            rabbitTemplate.convertAndSend(MessagingConfig.SAFE_DELETION_EXCHANGE_NAME, MessagingConfig.SAFE_DELETION_ROUTING_KEY, encryptedMessage);
+            System.out.println("Safe deletion message published!");
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Error publishing message!");
+        }
+
     }
 
     /*public void publishUserRegistration(UserRegisteredPayload payload){
