@@ -58,11 +58,11 @@ public class AuthenticationServiceImplTest {
         this.repository = mock(UserCredentialRepository.class);
         this.passwordEncoder = mock(PasswordEncoder.class);
         this.jwtService = mock(JwtServiceImpl.class);
-        this.messagingService = mock(MessagingServiceImpl.class);
+        //this.messagingService = mock(MessagingServiceImpl.class);
         this.objConverter = mock(ObjConverter.class);
         this.authenticationManager = mock(AuthenticationManager.class);
         this.envVariables = mock(EnvVariables.class);
-        this.authenticationService = new AuthenticationServiceImpl(repository, passwordEncoder, jwtService, messagingService, objConverter, authenticationManager, envVariables);
+        this.authenticationService = new AuthenticationServiceImpl(repository, passwordEncoder, jwtService, objConverter, authenticationManager, envVariables);
     }
 
     @org.junit.jupiter.api.Test
@@ -86,15 +86,15 @@ public class AuthenticationServiceImplTest {
     }
 
     @Test
-    public void saveUser_testSuccess() {
+    public void saveUser_testFail() {
         RegisterRequest request = new RegisterRequest("user", "pass", "", "", new Date());
         when(passwordEncoder.encode("pass")).thenReturn("encodedPass");
         when(repository.saveAndFlush(any(UserCredential.class))).thenThrow(new DataIntegrityViolationException("User exists"));
 
         RegisteredResponse response = authenticationService.saveUser(request);
 
-        Assertions.assertEquals(HttpStatus.OK, response.getStatus());
-        Assertions.assertEquals("Successful registration", response.getMessage());
+        Assertions.assertEquals(HttpStatus.CONFLICT, response.getStatus());
+        Assertions.assertEquals("E-mail already registered", response.getMessage());
     }
 
 }

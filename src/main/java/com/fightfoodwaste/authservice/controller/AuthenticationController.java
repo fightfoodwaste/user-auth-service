@@ -29,7 +29,7 @@ public class AuthenticationController{
     public ResponseEntity<RegisteredResponse> addNewUser(@RequestBody RegisterRequest request) {
         try{
             RegisteredResponse response= service.saveUser(request);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok().body(response);
         }
         catch(Exception e){
             return ResponseEntity.internalServerError().build();

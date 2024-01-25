@@ -1,4 +1,4 @@
-package com.fightfoodwaste.authservice.config;
+/*package com.fightfoodwaste.authservice.config;
 
 import com.rabbitmq.client.ConnectionFactory;
 import jakarta.inject.Qualifier;
@@ -66,5 +66,5 @@ public class MessagingConfig {
         rabbitTemplate.setMessageConverter(jsonMessageConverter());
         return rabbitTemplate;
     }
-}
+}*/
 

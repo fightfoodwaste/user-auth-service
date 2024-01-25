@@ -23,7 +23,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserCredentialRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final MessagingService messagingService;
+    //private final MessagingService messagingService;
     private final ObjConverter objConverter;
     private final AuthenticationManager authenticationManager;
     private final EnvVariables envVariables;
@@ -39,7 +39,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         try{
             UserCredential user = repository.saveAndFlush(credential);
             UserRegisteredPayload payload = objConverter.toUserRegistrationPayload(user.getId(), request);
-            messagingService.publishUserRegistration(payload);
+            //messagingService.publishUserRegistration(payload);
             return new RegisteredResponse(HttpStatus.OK,"Successful registration");
         }
         catch (Exception e){
@@ -80,7 +80,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if(header.equals(envVariables.getAdminKey())){
             repository.deleteById(id);
-            messagingService.publishSafeDeletion(new SafeDeletionPayload(id));
+            //messagingService.publishSafeDeletion(new SafeDeletionPayload(id));
             return HttpStatus.OK;
         }
         return HttpStatus.FORBIDDEN;

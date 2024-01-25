@@ -1,4 +1,4 @@
-package com.fightfoodwaste.authservice.service;
+/* com.fightfoodwaste.authservice.service;
 
 import com.fightfoodwaste.authservice.DTO.SafeDeletionPayload;
 import com.fightfoodwaste.authservice.config.MessagingConfig;
@@ -78,5 +78,5 @@ public class MessagingServiceImpl implements MessagingService{
             e.printStackTrace();
             System.out.println("Timeout");
         }
-    }*/
-}
+    }
+}*/

@@ -2,9 +2,9 @@ spring:
   application:
     name: user-auth
   datasource:
-    url: jdbc:postgresql://postgres-auth-service.postgres.database.azure.com:5432/auth
+    url: jdbc:postgresql://localhost:5433/auth
     username: postgres
-    password: Sergtsop1
+    password: postgres
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -19,10 +19,14 @@ spring:
     username: guest
     password: guest
 
-
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info, prometheus
 
 server:
-  port: 8082
+  port: 8080
 
 eureka:
   client:
@@ -33,3 +37,7 @@ eureka:
 
 secret:
   key: ${JWT_SECRET:5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437}
+  admin-key: ${ADMIN_KEY:gxP&vWZdjVUtS@rQmNhLkGpE3bA}
+  encryption-key: ${ENCRYPTION_KEY:NgA9sKD4tC9mtlYmvTEPWFsS0c6EB4QRZuHYwhsf77g=}
+  encryption-algorithm: ${ENCRYPTION_ALGORITHM:AES}
+
