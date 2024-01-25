@@ -25,6 +25,11 @@ public class AuthenticationController{
 
     private final AuthenticationService service;
 
+
+
+
+
+
     @PostMapping("/register")
     public ResponseEntity<RegisteredResponse> addNewUser(@RequestBody RegisterRequest request) {
         try{

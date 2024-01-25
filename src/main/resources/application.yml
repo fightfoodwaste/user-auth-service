@@ -2,7 +2,7 @@ spring:
   application:
     name: user-auth
   datasource:
-    url: jdbc:postgresql://auth-postgres.postgres.database.azure.com:5432/auth
+    url: jdbc:postgresql://postgres-auth-service.postgres.database.azure.com:5432/auth
     username: postgres
     password: Sergtsop1
   jpa:
