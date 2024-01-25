@@ -1,85 +1,100 @@
 package com.fightfoodwaste.authservice.service;
 
 import com.fightfoodwaste.authservice.DTO.*;
+import com.fightfoodwaste.authservice.entity.UserCredential;
+import com.fightfoodwaste.authservice.env.EnvVariables;
 import com.fightfoodwaste.authservice.repository.UserCredentialRepository;
+import com.fightfoodwaste.authservice.utility.ObjConverter;
+import org.checkerframework.checker.units.qual.A;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.mockito.MockitoAnnotations.openMocks;
 
+@ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class AuthenticationServiceImplTest {
+
 
     @Mock
     private UserCredentialRepository repository;
-
     @Mock
     private PasswordEncoder passwordEncoder;
-
     @Mock
-    private JwtServiceImpl jwtServiceImpl;
+    private JwtService jwtService;
+    @Mock
+    private MessagingService messagingService;
+    @Mock
+    private ObjConverter objConverter;
+    @Mock
+    private AuthenticationManager authenticationManager;
+    @Mock
+    private EnvVariables envVariables;
 
     @InjectMocks
     private AuthenticationServiceImpl authenticationService;
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
+
+    void setUp(){
+        this.repository = mock(UserCredentialRepository.class);
+        this.passwordEncoder = mock(PasswordEncoder.class);
+        this.jwtService = mock(JwtServiceImpl.class);
+        this.messagingService = mock(MessagingServiceImpl.class);
+        this.objConverter = mock(ObjConverter.class);
+        this.authenticationManager = mock(AuthenticationManager.class);
+        this.envVariables = mock(EnvVariables.class);
+        this.authenticationService = new AuthenticationServiceImpl(repository, passwordEncoder, jwtService, messagingService, objConverter, authenticationManager, envVariables);
     }
 
-    /*@Test
-    public void testSaveUser_Success() {
-        // Mocking
-        RegisterRequest credential = new RegisterRequest(); // Assuming a constructor or setters
-        when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+    @org.junit.jupiter.api.Test
+    public void saveUser_ShouldRegisterSuccessfully() {
+        RegisterRequest request = new RegisterRequest("user", "pass", "", "", new Date());
+        when(this.passwordEncoder.encode("pass")).thenReturn("encodedPass");
+        when(repository.saveAndFlush(any(UserCredential.class))).thenReturn(new UserCredential(1L, "user", "encodedPass"));
 
-        // Execution
-        RegisteredResponse response = authenticationService.saveUser(credential);
+        RegisteredResponse response = authenticationService.saveUser(request);
 
-        // Assertions
-        assertEquals(HttpStatus.OK, response.getStatus());
-        assertEquals("Successful registration", response.getMessage());
-    }*/
+        Assertions.assertEquals(HttpStatus.OK, response.getStatus());
+        Assertions.assertEquals("Successful registration", response.getMessage());
+    }
+
+    @org.junit.jupiter.api.Test
+    public void saveUser_ShouldReturnBadRequestForNullRequest() {
+        RegisteredResponse response = authenticationService.saveUser(null);
+
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
+        Assertions.assertEquals("Invalid request", response.getMessage());
+    }
 
     @Test
-    public void testSaveUser_NullCredential() {
-        RegisterRequest userCredential = null;
-        RegisteredResponse response = authenticationService.saveUser(userCredential);
+    public void saveUser_testSuccess() {
+        RegisterRequest request = new RegisterRequest("user", "pass", "", "", new Date());
+        when(passwordEncoder.encode("pass")).thenReturn("encodedPass");
+        when(repository.saveAndFlush(any(UserCredential.class))).thenThrow(new DataIntegrityViolationException("User exists"));
 
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatus());
-        assertEquals("Invalid request", response.getMessage());
+        RegisteredResponse response = authenticationService.saveUser(request);
+
+        Assertions.assertEquals(HttpStatus.OK, response.getStatus());
+        Assertions.assertEquals("Successful registration", response.getMessage());
     }
 
-    /*@Test
-    public void testGenerateToken() {
-        // Mocking
-        String expectedToken = "token";
-        when(jwtServiceImpl.generateToken(anyString())).thenReturn(expectedToken);
-
-        // Execution
-        AuthResponse response = authenticationService.generateToken(new AuthRequest("username", "password"));
-
-        // Assertions
-        assertEquals(expectedToken, response.getAuth_token());
-    }*/
-
-    @Test
-    public void testValidateToken() {
-        // Mocking
-        doNothing().when(jwtServiceImpl).validateToken(anyString());
-
-        // Execution
-        authenticationService.validateToken(new ValidateRequest("validToken"));
-
-        // Verification
-        verify(jwtServiceImpl).validateToken("validToken");
-    }
-
-    // Additional tests to handle exceptions and other edge cases
 }

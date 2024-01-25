@@ -20,16 +20,15 @@ import java.util.Random;
 @RestController
 @RequestMapping("/auth")
 @AllArgsConstructor
+@CrossOrigin
 public class AuthenticationController{
 
     private final AuthenticationService service;
 
     @PostMapping("/register")
     public ResponseEntity<RegisteredResponse> addNewUser(@RequestBody RegisterRequest request) {
-        Random random = new Random();
         try{
-            //RegisteredResponse response= service.saveUser(request);
-            Thread.sleep(random.nextLong(500, 1500));
+            RegisteredResponse response= service.saveUser(request);
             return ResponseEntity.ok().build();
         }
         catch(Exception e){

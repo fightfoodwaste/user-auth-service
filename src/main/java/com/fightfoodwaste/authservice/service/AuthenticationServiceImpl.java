@@ -27,7 +27,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final ObjConverter objConverter;
     private final AuthenticationManager authenticationManager;
     private final EnvVariables envVariables;
-    private static long i = 0;
 
 
     @Override
@@ -38,9 +37,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         UserCredential credential = new UserCredential(request.getUsername(), request.getPassword());
         credential.setPassword(passwordEncoder.encode(credential.getPassword()));
         try{
-            //UserCredential user = repository.saveAndFlush(credential);
-            i += 1;
-            UserRegisteredPayload payload = objConverter.toUserRegistrationPayload(i, request);
+            UserCredential user = repository.saveAndFlush(credential);
+            UserRegisteredPayload payload = objConverter.toUserRegistrationPayload(user.getId(), request);
             messagingService.publishUserRegistration(payload);
             return new RegisteredResponse(HttpStatus.OK,"Successful registration");
         }
